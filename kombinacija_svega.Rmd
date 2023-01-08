@@ -1,0 +1,75 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+Implementacija ANOVE:
+
+```{r}
+# Učitavanje potrebnih paketa
+library(tidyverse)
+
+# Učitavanje podataka o igračima
+players = read.csv("Statistika nogometaša engleske Premier lige.csv", stringsAsFactors = FALSE)
+players$Min <- as.numeric(gsub(",", "", players$Min))
+players <- players %>% mutate(Min = coalesce(Min, 0))
+players <- players[!is.na(players$Team),]
+players <- players[!is.na(players$Age),]
+
+# Filtriranje podataka tako da ostaju samo mladi igrači (do 25 godina)
+players_young <- players %>% filter(Age <= 25)
+
+# Izračunavanje prosječnog broja odigranih minuta po ekipi
+mp_by_team <- players_young %>% 
+  group_by(Team) %>% 
+  summarize(mean_mp = mean(Min))
+
+# Izvršavanje ANOVA testa za prosječan broj odigranih minuta
+model <- aov(Min ~ Team, data = players_young)
+
+# Prikaz rezultata testa
+summary(model)
+```
+
+Implementacija Tukey HSD-a (NE RADI!, treba provjeriti glht funkciju... vjerojatno nećemo ovo ostaviti u završnom reportu):
+
+```{r}
+# Učitavanje potrebnih paketa
+library(tidyverse)
+library(multcomp)
+
+# Izvršavanje ANOVA testa za prosječan broj odigranih minuta
+model <- aov(Min ~ as.factor(Team), data = players_young)
+
+# Izvršavanje Tukeys HSD testa
+tukeys_hsd <- glht(model, linfct = mcp(Team = "Tukey"))
+
+# Prikaz rezultata testa
+summary(tukeys_hsd)
+
+
+```
+
+Drugo pitanje - osnovna analiza:
+```{r}
+# Izračunavanje prosječnog broja dobivenih žutih kartona po poziciji
+yellow_cards_by_pos <- players %>% 
+  group_by(Pos) %>% 
+  summarize(mean_yellow_cards = mean(CrdY))
+
+# Prikaz rezultata
+yellow_cards_by_pos
+
+```
+
+Uporaba ANOVA-e (mješane pozicije poput (FW/MF) su izbačene):
+```{r}
+# Filtriranje podataka tako da ostaju samo igrači veznog reda i napadači
+players_fw_mf <- players %>% filter(Pos %in% c("FW", "MF"))
+
+# Izvršavanje ANOVA testa za prosječan broj dobivenih žutih kartona po poziciji
+model <- aov(CrdY ~ as.factor(Pos), data = players_fw_mf)
+
+# Prikaz p-vrijednosti
+summary(model)
+```
