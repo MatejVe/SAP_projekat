@@ -7,6 +7,7 @@ Implementacija ANOVE:
 
 ```{r}
 # Učitavanje potrebnih paketa
+install.packages("tidyverse")
 library(tidyverse)
 
 # Učitavanje podataka o igračima
@@ -72,4 +73,56 @@ model <- aov(CrdY ~ as.factor(Pos), data = players_fw_mf)
 
 # Prikaz p-vrijednosti
 summary(model)
+```
+
+Uspješnost igrača:broj odigranih minuta
+```{r}
+install.packages("caTools")
+library(tidyverse)
+library(caTools)
+
+df <- players
+
+df <- na.omit(df)
+
+
+set.seed(123)  # Set seed for reproducibility
+split <- sample.split(df$Min, SplitRatio = 0.7)
+train <- subset(df, split == TRUE)
+test <- subset(df, split == FALSE)
+
+model <- lm(Min ~ Team + Pos + MP + Gls + Ast + CrdY + CrdR, data = train)
+summary(model)
+
+predictions <- predict(model, test)
+
+# Calculate root mean squared error (RMSE)
+rmse <- sqrt(mean((test$Min - predictions)^2))
+
+# Print RMSE
+print(rmse)
+
+weights <- c(0.2, 0.2, 0.3, 0.15, -0.1, -0.2, 0.001)
+
+df <- df %>%
+  mutate(success = Age * weights[1] + MP * weights[2] + Gls * weights[3] + Ast * weights[4] + CrdY * weights[5] + CrdR * weights[6] + Min * weights[7])
+
+df %>%
+  top_n(10, success)
+
+```
+
+
+```{r}
+library(dplyr)
+library(base)
+
+# Assume that you have a data frame called "players" with a column called "nationality"
+# This column contains the nationality of each player
+df <- df %>% mutate(Nation = iconv(Nation, "latin1", "ASCII", sub = ""))
+# Separate domestic and foreign players
+domestic_players <- filter(df, Nation == "eng�ENG")
+foreign_players <- filter(df, Nation != "eng�ENG")
+
+
 ```

@@ -1755,11 +1755,39 @@ display: none;
 <p>Implementacija ANOVE:</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBVxI1pdGF2YW5qZSBwb3RyZWJuaWggcGFrZXRhXG5saWJyYXJ5KHRpZHl2ZXJzZSlcblxuIyBVxI1pdGF2YW5qZSBwb2RhdGFrYSBvIGlncmHEjWltYVxucGxheWVycyA9IHJlYWQuY3N2KFwiU3RhdGlzdGlrYSBub2dvbWV0YcWhYSBlbmdsZXNrZSBQcmVtaWVyIGxpZ2UuY3N2XCIsIHN0cmluZ3NBc0ZhY3RvcnMgPSBGQUxTRSlcbnBsYXllcnMkTWluIDwtIGFzLm51bWVyaWMoZ3N1YihcIixcIiwgXCJcIiwgcGxheWVycyRNaW4pKVxucGxheWVycyA8LSBwbGF5ZXJzICU+JSBtdXRhdGUoTWluID0gY29hbGVzY2UoTWluLCAwKSlcbnBsYXllcnMgPC0gcGxheWVyc1shaXMubmEocGxheWVycyRUZWFtKSxdXG5wbGF5ZXJzIDwtIHBsYXllcnNbIWlzLm5hKHBsYXllcnMkQWdlKSxdXG5cbiMgRmlsdHJpcmFuamUgcG9kYXRha2EgdGFrbyBkYSBvc3RhanUgc2FtbyBtbGFkaSBpZ3JhxI1pIChkbyAyNSBnb2RpbmEpXG5wbGF5ZXJzX3lvdW5nIDwtIHBsYXllcnMgJT4lIGZpbHRlcihBZ2UgPD0gMjUpXG5cbiMgSXpyYcSNdW5hdmFuamUgcHJvc2plxI1ub2cgYnJvamEgb2RpZ3JhbmloIG1pbnV0YSBwbyBla2lwaVxubXBfYnlfdGVhbSA8LSBwbGF5ZXJzX3lvdW5nICU+JSBcbiAgZ3JvdXBfYnkoVGVhbSkgJT4lIFxuICBzdW1tYXJpemUobWVhbl9tcCA9IG1lYW4oTWluKSlcblxuIyBJenZyxaFhdmFuamUgQU5PVkEgdGVzdGEgemEgcHJvc2plxI1hbiBicm9qIG9kaWdyYW5paCBtaW51dGFcbm1vZGVsIDwtIGFvdihNaW4gfiBUZWFtLCBkYXRhID0gcGxheWVyc195b3VuZylcblxuIyBQcmlrYXogcmV6dWx0YXRhIHRlc3RhXG5zdW1tYXJ5KG1vZGVsKVxuYGBgIn0= -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBVxI1pdGF2YW5qZSBwb3RyZWJuaWggcGFrZXRhXG5pbnN0YWxsLnBhY2thZ2VzKFwidGlkeXZlcnNlXCIpXG5gYGAifQ== -->
 <pre class="r"><code># Učitavanje potrebnih paketa
-library(tidyverse)
+install.packages(&quot;tidyverse&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiV0FSTklORzogUnRvb2xzIGlzIHJlcXVpcmVkIHRvIGJ1aWxkIFIgcGFja2FnZXMgYnV0IGlzIG5vdCBjdXJyZW50bHkgaW5zdGFsbGVkLiBQbGVhc2UgZG93bmxvYWQgYW5kIGluc3RhbGwgdGhlIGFwcHJvcHJpYXRlIHZlcnNpb24gb2YgUnRvb2xzIGJlZm9yZSBwcm9jZWVkaW5nOlxuXG5odHRwczovL2NyYW4ucnN0dWRpby5jb20vYmluL3dpbmRvd3MvUnRvb2xzL1xuSW5zdGFsbGluZyBwYWNrYWdlIGludG8g4oCYQzovVXNlcnMvbWF0aWovQXBwRGF0YS9Mb2NhbC9SL3dpbi1saWJyYXJ5LzQuMuKAmVxuKGFzIOKAmGxpYuKAmSBpcyB1bnNwZWNpZmllZClcbnRyeWluZyBVUkwgJ2h0dHBzOi8vY3Jhbi5yc3R1ZGlvLmNvbS9iaW4vd2luZG93cy9jb250cmliLzQuMi90aWR5dmVyc2VfMS4zLjIuemlwJ1xuQ29udGVudCB0eXBlICdhcHBsaWNhdGlvbi96aXAnIGxlbmd0aCA0Mjg5NzAgYnl0ZXMgKDQxOCBLQilcbmRvd25sb2FkZWQgNDE4IEtCXG4ifQ== -->
+<pre><code>WARNING: Rtools is required to build R packages but is not currently installed. Please download and install the appropriate version of Rtools before proceeding:
 
-# Učitavanje podataka o igračima
+https://cran.rstudio.com/bin/windows/Rtools/
+Installing package into ‘C:/Users/matij/AppData/Local/R/win-library/4.2’
+(as ‘lib’ is unspecified)
+trying URL &#39;https://cran.rstudio.com/bin/windows/contrib/4.2/tidyverse_1.3.2.zip&#39;
+Content type &#39;application/zip&#39; length 428970 bytes (418 KB)
+downloaded 418 KB</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-output-begin eyJkYXRhIjoicGFja2FnZSDigJh0aWR5dmVyc2XigJkgc3VjY2Vzc2Z1bGx5IHVucGFja2VkIGFuZCBNRDUgc3VtcyBjaGVja2VkXG5cblRoZSBkb3dubG9hZGVkIGJpbmFyeSBwYWNrYWdlcyBhcmUgaW5cblx0QzpcXFVzZXJzXFxtYXRpalxcQXBwRGF0YVxcTG9jYWxcXFRlbXBcXFJ0bXBXdTJvWXpcXGRvd25sb2FkZWRfcGFja2FnZXNcbiJ9 -->
+<pre><code>package ‘tidyverse’ successfully unpacked and MD5 sums checked
+
+The downloaded binary packages are in
+    C:\Users\matij\AppData\Local\Temp\RtmpWu2oYz\downloaded_packages</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeSh0aWR5dmVyc2UpXG5gYGAifQ== -->
+<pre class="r"><code>library(tidyverse)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoi4pSA4pSAIEF0dGFjaGluZyBwYWNrYWdlcyDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIAgdGlkeXZlcnNlIDEuMy4yIOKUgOKUgOKclCBnZ3Bsb3QyIDMuNC4wICAgICAg4pyUIHB1cnJyICAgMS4wLjAgXG7inJQgdGliYmxlICAzLjEuOCAgICAgIOKclCBkcGx5ciAgIDEuMC4xMFxu4pyUIHRpZHlyICAgMS4yLjEgICAgICDinJQgc3RyaW5nciAxLjUuMCBcbuKclCByZWFkciAgIDIuMS4zICAgICAg4pyUIGZvcmNhdHMgMC41LjIg4pSA4pSAIENvbmZsaWN0cyDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIAgdGlkeXZlcnNlX2NvbmZsaWN0cygpIOKUgOKUgFxu4pyWIGRwbHlyOjpmaWx0ZXIoKSBtYXNrcyBzdGF0czo6ZmlsdGVyKClcbuKcliBkcGx5cjo6bGFnKCkgICAgbWFza3Mgc3RhdHM6OmxhZygpXG4ifQ== -->
+<pre><code>── Attaching packages ────────────────────────────────────────────────────────────────────── tidyverse 1.3.2 ──✔ ggplot2 3.4.0      ✔ purrr   1.0.0 
+✔ tibble  3.1.8      ✔ dplyr   1.0.10
+✔ tidyr   1.2.1      ✔ stringr 1.5.0 
+✔ readr   2.1.3      ✔ forcats 0.5.2 ── Conflicts ───────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBVxI1pdGF2YW5qZSBwb2RhdGFrYSBvIGlncmHEjWltYVxucGxheWVycyA9IHJlYWQuY3N2KFwiU3RhdGlzdGlrYSBub2dvbWV0YcWhYSBlbmdsZXNrZSBQcmVtaWVyIGxpZ2UuY3N2XCIsIHN0cmluZ3NBc0ZhY3RvcnMgPSBGQUxTRSlcbnBsYXllcnMkTWluIDwtIGFzLm51bWVyaWMoZ3N1YihcIixcIiwgXCJcIiwgcGxheWVycyRNaW4pKVxucGxheWVycyA8LSBwbGF5ZXJzICU+JSBtdXRhdGUoTWluID0gY29hbGVzY2UoTWluLCAwKSlcbnBsYXllcnMgPC0gcGxheWVyc1shaXMubmEocGxheWVycyRUZWFtKSxdXG5wbGF5ZXJzIDwtIHBsYXllcnNbIWlzLm5hKHBsYXllcnMkQWdlKSxdXG5cbiMgRmlsdHJpcmFuamUgcG9kYXRha2EgdGFrbyBkYSBvc3RhanUgc2FtbyBtbGFkaSBpZ3JhxI1pIChkbyAyNSBnb2RpbmEpXG5wbGF5ZXJzX3lvdW5nIDwtIHBsYXllcnMgJT4lIGZpbHRlcihBZ2UgPD0gMjUpXG5cbiMgSXpyYcSNdW5hdmFuamUgcHJvc2plxI1ub2cgYnJvamEgb2RpZ3JhbmloIG1pbnV0YSBwbyBla2lwaVxubXBfYnlfdGVhbSA8LSBwbGF5ZXJzX3lvdW5nICU+JSBcbiAgZ3JvdXBfYnkoVGVhbSkgJT4lIFxuICBzdW1tYXJpemUobWVhbl9tcCA9IG1lYW4oTWluKSlcblxuIyBJenZyxaFhdmFuamUgQU5PVkEgdGVzdGEgemEgcHJvc2plxI1hbiBicm9qIG9kaWdyYW5paCBtaW51dGFcbm1vZGVsIDwtIGFvdihNaW4gfiBUZWFtLCBkYXRhID0gcGxheWVyc195b3VuZylcblxuIyBQcmlrYXogcmV6dWx0YXRhIHRlc3RhXG5zdW1tYXJ5KG1vZGVsKVxuYGBgIn0= -->
+<pre class="r"><code># Učitavanje podataka o igračima
 players = read.csv(&quot;Statistika nogometaša engleske Premier lige.csv&quot;, stringsAsFactors = FALSE)
 players$Min &lt;- as.numeric(gsub(&quot;,&quot;, &quot;&quot;, players$Min))
 players &lt;- players %&gt;% mutate(Min = coalesce(Min, 0))
@@ -1780,6 +1808,11 @@ model &lt;- aov(Min ~ Team, data = players_young)
 # Prikaz rezultata testa
 summary(model)</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiICAgICAgICAgICAgIERmICAgIFN1bSBTcSBNZWFuIFNxIEYgdmFsdWUgUHIoPkYpXG5UZWFtICAgICAgICAgMTkgIDE0MTMzMjc0ICA3NDM4NTcgICAwLjczMSAgMC43ODdcblJlc2lkdWFscyAgIDM4MyAzODk4ODEzNzMgMTAxNzk2NyAgICAgICAgICAgICAgIFxuIn0= -->
+<pre><code>             Df    Sum Sq Mean Sq F value Pr(&gt;F)
+Team         19  14133274  743857   0.731  0.787
+Residuals   383 389881373 1017967               </code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <p>Implementacija Tukey HSD-a (NE RADI!, treba provjeriti glht funkciju…
@@ -1821,22 +1854,89 @@ yellow_cards_by_pos
 <p>Uporaba ANOVA-e (mješane pozicije poput (FW/MF) su izbačene):</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBQcmlrYXogcC12cmlqZWRub3N0aVxuc3VtbWFyeShtb2RlbClcblxuYGBgIn0= -->
-<pre class="r"><code># Prikaz p-vrijednosti
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBGaWx0cmlyYW5qZSBwb2RhdGFrYSB0YWtvIGRhIG9zdGFqdSBzYW1vIGlncmHEjWkgdmV6bm9nIHJlZGEgaSBuYXBhZGHEjWlcbnBsYXllcnNfZndfbWYgPC0gcGxheWVycyAlPiUgZmlsdGVyKFBvcyAlaW4lIGMoXCJGV1wiLCBcIk1GXCIpKVxuXG4jIEl6dnLFoWF2YW5qZSBBTk9WQSB0ZXN0YSB6YSBwcm9zamXEjWFuIGJyb2ogZG9iaXZlbmloIMW+dXRpaCBrYXJ0b25hIHBvIHBvemljaWppXG5tb2RlbCA8LSBhb3YoQ3JkWSB+IGFzLmZhY3RvcihQb3MpLCBkYXRhID0gcGxheWVyc19md19tZilcblxuIyBQcmlrYXogcC12cmlqZWRub3N0aVxuc3VtbWFyeShtb2RlbClcbmBgYCJ9 -->
+<pre class="r"><code># Filtriranje podataka tako da ostaju samo igrači veznog reda i napadači
+players_fw_mf &lt;- players %&gt;% filter(Pos %in% c(&quot;FW&quot;, &quot;MF&quot;))
+
+# Izvršavanje ANOVA testa za prosječan broj dobivenih žutih kartona po poziciji
+model &lt;- aov(CrdY ~ as.factor(Pos), data = players_fw_mf)
+
+# Prikaz p-vrijednosti
+summary(model)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Uspješnost igrača:broj odigranih minuta</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuaW5zdGFsbC5wYWNrYWdlcyhcImNhVG9vbHNcIilcbmxpYnJhcnkodGlkeXZlcnNlKVxubGlicmFyeShjYVRvb2xzKVxuXG5kZiA8LSBwbGF5ZXJzXG5cbmRmIDwtIG5hLm9taXQoZGYpXG5cblxuc2V0LnNlZWQoMTIzKSAgIyBTZXQgc2VlZCBmb3IgcmVwcm9kdWNpYmlsaXR5XG5zcGxpdCA8LSBzYW1wbGUuc3BsaXQoZGYkTWluLCBTcGxpdFJhdGlvID0gMC43KVxudHJhaW4gPC0gc3Vic2V0KGRmLCBzcGxpdCA9PSBUUlVFKVxudGVzdCA8LSBzdWJzZXQoZGYsIHNwbGl0ID09IEZBTFNFKVxuXG5tb2RlbCA8LSBsbShNaW4gfiBUZWFtICsgUG9zICsgTVAgKyBHbHMgKyBBc3QgKyBDcmRZICsgQ3JkUiwgZGF0YSA9IHRyYWluKVxuc3VtbWFyeShtb2RlbClcblxucHJlZGljdGlvbnMgPC0gcHJlZGljdChtb2RlbCwgdGVzdClcblxuIyBDYWxjdWxhdGUgcm9vdCBtZWFuIHNxdWFyZWQgZXJyb3IgKFJNU0UpXG5ybXNlIDwtIHNxcnQobWVhbigodGVzdCRNaW4gLSBwcmVkaWN0aW9ucyleMikpXG5cbiMgUHJpbnQgUk1TRVxucHJpbnQocm1zZSlcblxud2VpZ2h0cyA8LSBjKDAuMiwgMC4yLCAwLjMsIDAuMTUsIC0wLjEsIC0wLjIsIDAuMDAxKVxuXG5kZiA8LSBkZiAlPiVcbiAgbXV0YXRlKHN1Y2Nlc3MgPSBBZ2UgKiB3ZWlnaHRzWzFdICsgTVAgKiB3ZWlnaHRzWzJdICsgR2xzICogd2VpZ2h0c1szXSArIEFzdCAqIHdlaWdodHNbNF0gKyBDcmRZICogd2VpZ2h0c1s1XSArIENyZFIgKiB3ZWlnaHRzWzZdICsgTWluICogd2VpZ2h0c1s3XSlcblxuZGYgJT4lXG4gIHRvcF9uKDEwLCBzdWNjZXNzKVxuXG5gYGAifQ== -->
+<pre class="r"><code>install.packages(&quot;caTools&quot;)
+library(tidyverse)
+library(caTools)
+
+df &lt;- players
+
+df &lt;- na.omit(df)
+
+
+set.seed(123)  # Set seed for reproducibility
+split &lt;- sample.split(df$Min, SplitRatio = 0.7)
+train &lt;- subset(df, split == TRUE)
+test &lt;- subset(df, split == FALSE)
+
+model &lt;- lm(Min ~ Team + Pos + MP + Gls + Ast + CrdY + CrdR, data = train)
 summary(model)
+
+predictions &lt;- predict(model, test)
+
+# Calculate root mean squared error (RMSE)
+rmse &lt;- sqrt(mean((test$Min - predictions)^2))
+
+# Print RMSE
+print(rmse)
+
+weights &lt;- c(0.2, 0.2, 0.3, 0.15, -0.1, -0.2, 0.001)
+
+df &lt;- df %&gt;%
+  mutate(success = Age * weights[1] + MP * weights[2] + Gls * weights[3] + Ast * weights[4] + CrdY * weights[5] + CrdR * weights[6] + Min * weights[7])
+
+df %&gt;%
+  top_n(10, success)
 </code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiICAgICAgICAgICAgICAgIERmIFN1bSBTcSBNZWFuIFNxIEYgdmFsdWUgIFByKD5GKSAgIFxuYXMuZmFjdG9yKFBvcykgICAxICAgNjcuNyAgIDY3LjY1ICAgOS42NTggMC4wMDIxNiAqKlxuUmVzaWR1YWxzICAgICAgMTk3IDEzNzkuOSAgICA3LjAwICAgICAgICAgICAgICAgICAgIFxuLS0tXG5TaWduaWYuIGNvZGVzOiAgMCDigJgqKirigJkgMC4wMDEg4oCYKirigJkgMC4wMSDigJgq4oCZIDAuMDUg4oCYLuKAmSAwLjEg4oCYIOKAmSAxXG41NiBvYnNlcnZhdGlvbnMgZGVsZXRlZCBkdWUgdG8gbWlzc2luZ25lc3NcbiJ9 -->
-<pre><code>                Df Sum Sq Mean Sq F value  Pr(&gt;F)   
-as.factor(Pos)   1   67.7   67.65   9.658 0.00216 **
-Residuals      197 1379.9    7.00                   
----
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-56 observations deleted due to missingness</code></pre>
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShkcGx5cilcblxuIyBBc3N1bWUgdGhhdCB5b3UgaGF2ZSBhIGRhdGEgZnJhbWUgY2FsbGVkIFwicGxheWVyc1wiIHdpdGggYSBjb2x1bW4gY2FsbGVkIFwibmF0aW9uYWxpdHlcIlxuIyBUaGlzIGNvbHVtbiBjb250YWlucyB0aGUgbmF0aW9uYWxpdHkgb2YgZWFjaCBwbGF5ZXJcbmRmIDwtIGRmICU+JSBtdXRhdGVfaWYoaXMuY2hhcmFjdGVyLCBmdW5zKGdzdWIoXCJbXls6cHJpbnQ6XV1cIiwgXCJcIiwgLikpKVxuYGBgIn0= -->
+<pre class="r"><code>library(dplyr)
+
+# Assume that you have a data frame called &quot;players&quot; with a column called &quot;nationality&quot;
+# This column contains the nationality of each player
+df &lt;- df %&gt;% mutate_if(is.character, funs(gsub(&quot;[^[:print:]]&quot;, &quot;&quot;, .)))</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiV2FybmluZzogYGZ1bnMoKWAgd2FzIGRlcHJlY2F0ZWQgaW4gZHBseXIgMC44LjAuXG5QbGVhc2UgdXNlIGEgbGlzdCBvZiBlaXRoZXIgZnVuY3Rpb25zIG9yIGxhbWJkYXM6IFxuXG4gICMgU2ltcGxlIG5hbWVkIGxpc3Q6IFxuICBsaXN0KG1lYW4gPSBtZWFuLCBtZWRpYW4gPSBtZWRpYW4pXG5cbiAgIyBBdXRvIG5hbWVkIHdpdGggYHRpYmJsZTo6bHN0KClgOiBcbiAgdGliYmxlOjpsc3QobWVhbiwgbWVkaWFuKVxuXG4gICMgVXNpbmcgbGFtYmRhc1xuICBsaXN0KH4gbWVhbiguLCB0cmltID0gLjIpLCB+IG1lZGlhbiguLCBuYS5ybSA9IFRSVUUpKVxuIn0= -->
+<pre><code>Warning: `funs()` was deprecated in dplyr 0.8.0.
+Please use a list of either functions or lambdas: 
+
+  # Simple named list: 
+  list(mean = mean, median = median)
+
+  # Auto named with `tibble::lst()`: 
+  tibble::lst(mean, median)
+
+  # Using lambdas
+  list(~ mean(., trim = .2), ~ median(., na.rm = TRUE))</code></pre>
 <!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBTZXBhcmF0ZSBkb21lc3RpYyBhbmQgZm9yZWlnbiBwbGF5ZXJzXG5kb21lc3RpY19wbGF5ZXJzIDwtIGZpbHRlcihkZiwgTmF0aW9uID09IFwiZW5n77+9RU5HXCIpXG5mb3JlaWduX3BsYXllcnMgPC0gZmlsdGVyKGRmLCBOYXRpb24gIT0gXCJlbmfvv71FTkdcIilcblxuXG5gYGAifQ== -->
+<pre class="r"><code># Separate domestic and foreign players
+domestic_players &lt;- filter(df, Nation == &quot;eng�ENG&quot;)
+foreign_players &lt;- filter(df, Nation != &quot;eng�ENG&quot;)
+</code></pre>
+<!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIlIgTm90ZWJvb2siDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KDQpJbXBsZW1lbnRhY2lqYSBBTk9WRToNCg0KYGBge3J9DQojIFXEjWl0YXZhbmplIHBvdHJlYm5paCBwYWtldGENCmxpYnJhcnkodGlkeXZlcnNlKQ0KDQojIFXEjWl0YXZhbmplIHBvZGF0YWthIG8gaWdyYcSNaW1hDQpwbGF5ZXJzID0gcmVhZC5jc3YoIlN0YXRpc3Rpa2Egbm9nb21ldGHFoWEgZW5nbGVza2UgUHJlbWllciBsaWdlLmNzdiIsIHN0cmluZ3NBc0ZhY3RvcnMgPSBGQUxTRSkNCnBsYXllcnMkTWluIDwtIGFzLm51bWVyaWMoZ3N1YigiLCIsICIiLCBwbGF5ZXJzJE1pbikpDQpwbGF5ZXJzIDwtIHBsYXllcnMgJT4lIG11dGF0ZShNaW4gPSBjb2FsZXNjZShNaW4sIDApKQ0KcGxheWVycyA8LSBwbGF5ZXJzWyFpcy5uYShwbGF5ZXJzJFRlYW0pLF0NCnBsYXllcnMgPC0gcGxheWVyc1shaXMubmEocGxheWVycyRBZ2UpLF0NCg0KIyBGaWx0cmlyYW5qZSBwb2RhdGFrYSB0YWtvIGRhIG9zdGFqdSBzYW1vIG1sYWRpIGlncmHEjWkgKGRvIDI1IGdvZGluYSkNCnBsYXllcnNfeW91bmcgPC0gcGxheWVycyAlPiUgZmlsdGVyKEFnZSA8PSAyNSkNCg0KIyBJenJhxI11bmF2YW5qZSBwcm9zamXEjW5vZyBicm9qYSBvZGlncmFuaWggbWludXRhIHBvIGVraXBpDQptcF9ieV90ZWFtIDwtIHBsYXllcnNfeW91bmcgJT4lIA0KICBncm91cF9ieShUZWFtKSAlPiUgDQogIHN1bW1hcml6ZShtZWFuX21wID0gbWVhbihNaW4pKQ0KDQojIEl6dnLFoWF2YW5qZSBBTk9WQSB0ZXN0YSB6YSBwcm9zamXEjWFuIGJyb2ogb2RpZ3JhbmloIG1pbnV0YQ0KbW9kZWwgPC0gYW92KE1pbiB+IFRlYW0sIGRhdGEgPSBwbGF5ZXJzX3lvdW5nKQ0KDQojIFByaWtheiByZXp1bHRhdGEgdGVzdGENCnN1bW1hcnkobW9kZWwpDQpgYGANCg0KSW1wbGVtZW50YWNpamEgVHVrZXkgSFNELWEgKE5FIFJBREkhLCB0cmViYSBwcm92amVyaXRpIGdsaHQgZnVua2NpanUuLi4gdmplcm9qYXRubyBuZcSHZW1vIG92byBvc3Rhdml0aSB1IHphdnLFoW5vbSByZXBvcnR1KToNCg0KYGBge3J9DQojIFXEjWl0YXZhbmplIHBvdHJlYm5paCBwYWtldGENCmxpYnJhcnkodGlkeXZlcnNlKQ0KbGlicmFyeShtdWx0Y29tcCkNCg0KIyBJenZyxaFhdmFuamUgQU5PVkEgdGVzdGEgemEgcHJvc2plxI1hbiBicm9qIG9kaWdyYW5paCBtaW51dGENCm1vZGVsIDwtIGFvdihNaW4gfiBhcy5mYWN0b3IoVGVhbSksIGRhdGEgPSBwbGF5ZXJzX3lvdW5nKQ0KDQojIEl6dnLFoWF2YW5qZSBUdWtleXMgSFNEIHRlc3RhDQp0dWtleXNfaHNkIDwtIGdsaHQobW9kZWwsIGxpbmZjdCA9IG1jcChUZWFtID0gIlR1a2V5IikpDQoNCiMgUHJpa2F6IHJlenVsdGF0YSB0ZXN0YQ0Kc3VtbWFyeSh0dWtleXNfaHNkKQ0KDQoNCmBgYA0KDQpEcnVnbyBwaXRhbmplIC0gb3Nub3ZuYSBhbmFsaXphOg0KYGBge3J9DQojIEl6cmHEjXVuYXZhbmplIHByb3NqZcSNbm9nIGJyb2phIGRvYml2ZW5paCDFvnV0aWgga2FydG9uYSBwbyBwb3ppY2lqaQ0KeWVsbG93X2NhcmRzX2J5X3BvcyA8LSBwbGF5ZXJzICU+JSANCiAgZ3JvdXBfYnkoUG9zKSAlPiUgDQogIHN1bW1hcml6ZShtZWFuX3llbGxvd19jYXJkcyA9IG1lYW4oQ3JkWSkpDQoNCiMgUHJpa2F6IHJlenVsdGF0YQ0KeWVsbG93X2NhcmRzX2J5X3Bvcw0KDQpgYGANCg0KVXBvcmFiYSBBTk9WQS1lIChtamXFoWFuZSBwb3ppY2lqZSBwb3B1dCAoRlcvTUYpIHN1IGl6YmHEjWVuZSk6DQpgYGB7cn0NCiMgRmlsdHJpcmFuamUgcG9kYXRha2EgdGFrbyBkYSBvc3RhanUgc2FtbyBpZ3JhxI1pIHZlem5vZyByZWRhIGkgbmFwYWRhxI1pDQpwbGF5ZXJzX2Z3X21mIDwtIHBsYXllcnMgJT4lIGZpbHRlcihQb3MgJWluJSBjKCJGVyIsICJNRiIpKQ0KDQojIEl6dnLFoWF2YW5qZSBBTk9WQSB0ZXN0YSB6YSBwcm9zamXEjWFuIGJyb2ogZG9iaXZlbmloIMW+dXRpaCBrYXJ0b25hIHBvIHBvemljaWppDQptb2RlbCA8LSBhb3YoQ3JkWSB+IGFzLmZhY3RvcihQb3MpLCBkYXRhID0gcGxheWVyc19md19tZikNCg0KIyBQcmlrYXogcC12cmlqZWRub3N0aQ0Kc3VtbWFyeShtb2RlbCkNCmBgYA==</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIlIgTm90ZWJvb2siDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KDQpJbXBsZW1lbnRhY2lqYSBBTk9WRToNCg0KYGBge3J9DQojIFXEjWl0YXZhbmplIHBvdHJlYm5paCBwYWtldGENCmluc3RhbGwucGFja2FnZXMoInRpZHl2ZXJzZSIpDQpsaWJyYXJ5KHRpZHl2ZXJzZSkNCg0KIyBVxI1pdGF2YW5qZSBwb2RhdGFrYSBvIGlncmHEjWltYQ0KcGxheWVycyA9IHJlYWQuY3N2KCJTdGF0aXN0aWthIG5vZ29tZXRhxaFhIGVuZ2xlc2tlIFByZW1pZXIgbGlnZS5jc3YiLCBzdHJpbmdzQXNGYWN0b3JzID0gRkFMU0UpDQpwbGF5ZXJzJE1pbiA8LSBhcy5udW1lcmljKGdzdWIoIiwiLCAiIiwgcGxheWVycyRNaW4pKQ0KcGxheWVycyA8LSBwbGF5ZXJzICU+JSBtdXRhdGUoTWluID0gY29hbGVzY2UoTWluLCAwKSkNCnBsYXllcnMgPC0gcGxheWVyc1shaXMubmEocGxheWVycyRUZWFtKSxdDQpwbGF5ZXJzIDwtIHBsYXllcnNbIWlzLm5hKHBsYXllcnMkQWdlKSxdDQoNCiMgRmlsdHJpcmFuamUgcG9kYXRha2EgdGFrbyBkYSBvc3RhanUgc2FtbyBtbGFkaSBpZ3JhxI1pIChkbyAyNSBnb2RpbmEpDQpwbGF5ZXJzX3lvdW5nIDwtIHBsYXllcnMgJT4lIGZpbHRlcihBZ2UgPD0gMjUpDQoNCiMgSXpyYcSNdW5hdmFuamUgcHJvc2plxI1ub2cgYnJvamEgb2RpZ3JhbmloIG1pbnV0YSBwbyBla2lwaQ0KbXBfYnlfdGVhbSA8LSBwbGF5ZXJzX3lvdW5nICU+JSANCiAgZ3JvdXBfYnkoVGVhbSkgJT4lIA0KICBzdW1tYXJpemUobWVhbl9tcCA9IG1lYW4oTWluKSkNCg0KIyBJenZyxaFhdmFuamUgQU5PVkEgdGVzdGEgemEgcHJvc2plxI1hbiBicm9qIG9kaWdyYW5paCBtaW51dGENCm1vZGVsIDwtIGFvdihNaW4gfiBUZWFtLCBkYXRhID0gcGxheWVyc195b3VuZykNCg0KIyBQcmlrYXogcmV6dWx0YXRhIHRlc3RhDQpzdW1tYXJ5KG1vZGVsKQ0KYGBgDQoNCkltcGxlbWVudGFjaWphIFR1a2V5IEhTRC1hIChORSBSQURJISwgdHJlYmEgcHJvdmplcml0aSBnbGh0IGZ1bmtjaWp1Li4uIHZqZXJvamF0bm8gbmXEh2VtbyBvdm8gb3N0YXZpdGkgdSB6YXZyxaFub20gcmVwb3J0dSk6DQoNCmBgYHtyfQ0KIyBVxI1pdGF2YW5qZSBwb3RyZWJuaWggcGFrZXRhDQpsaWJyYXJ5KHRpZHl2ZXJzZSkNCmxpYnJhcnkobXVsdGNvbXApDQoNCiMgSXp2csWhYXZhbmplIEFOT1ZBIHRlc3RhIHphIHByb3NqZcSNYW4gYnJvaiBvZGlncmFuaWggbWludXRhDQptb2RlbCA8LSBhb3YoTWluIH4gYXMuZmFjdG9yKFRlYW0pLCBkYXRhID0gcGxheWVyc195b3VuZykNCg0KIyBJenZyxaFhdmFuamUgVHVrZXlzIEhTRCB0ZXN0YQ0KdHVrZXlzX2hzZCA8LSBnbGh0KG1vZGVsLCBsaW5mY3QgPSBtY3AoVGVhbSA9ICJUdWtleSIpKQ0KDQojIFByaWtheiByZXp1bHRhdGEgdGVzdGENCnN1bW1hcnkodHVrZXlzX2hzZCkNCg0KDQpgYGANCg0KRHJ1Z28gcGl0YW5qZSAtIG9zbm92bmEgYW5hbGl6YToNCmBgYHtyfQ0KIyBJenJhxI11bmF2YW5qZSBwcm9zamXEjW5vZyBicm9qYSBkb2JpdmVuaWggxb51dGloIGthcnRvbmEgcG8gcG96aWNpamkNCnllbGxvd19jYXJkc19ieV9wb3MgPC0gcGxheWVycyAlPiUgDQogIGdyb3VwX2J5KFBvcykgJT4lIA0KICBzdW1tYXJpemUobWVhbl95ZWxsb3dfY2FyZHMgPSBtZWFuKENyZFkpKQ0KDQojIFByaWtheiByZXp1bHRhdGENCnllbGxvd19jYXJkc19ieV9wb3MNCg0KYGBgDQoNClVwb3JhYmEgQU5PVkEtZSAobWplxaFhbmUgcG96aWNpamUgcG9wdXQgKEZXL01GKSBzdSBpemJhxI1lbmUpOg0KYGBge3J9DQojIEZpbHRyaXJhbmplIHBvZGF0YWthIHRha28gZGEgb3N0YWp1IHNhbW8gaWdyYcSNaSB2ZXpub2cgcmVkYSBpIG5hcGFkYcSNaQ0KcGxheWVyc19md19tZiA8LSBwbGF5ZXJzICU+JSBmaWx0ZXIoUG9zICVpbiUgYygiRlciLCAiTUYiKSkNCg0KIyBJenZyxaFhdmFuamUgQU5PVkEgdGVzdGEgemEgcHJvc2plxI1hbiBicm9qIGRvYml2ZW5paCDFvnV0aWgga2FydG9uYSBwbyBwb3ppY2lqaQ0KbW9kZWwgPC0gYW92KENyZFkgfiBhcy5mYWN0b3IoUG9zKSwgZGF0YSA9IHBsYXllcnNfZndfbWYpDQoNCiMgUHJpa2F6IHAtdnJpamVkbm9zdGkNCnN1bW1hcnkobW9kZWwpDQpgYGANCg0KVXNwamXFoW5vc3QgaWdyYcSNYTpicm9qIG9kaWdyYW5paCBtaW51dGENCmBgYHtyfQ0KaW5zdGFsbC5wYWNrYWdlcygiY2FUb29scyIpDQpsaWJyYXJ5KHRpZHl2ZXJzZSkNCmxpYnJhcnkoY2FUb29scykNCg0KZGYgPC0gcGxheWVycw0KDQpkZiA8LSBuYS5vbWl0KGRmKQ0KDQoNCnNldC5zZWVkKDEyMykgICMgU2V0IHNlZWQgZm9yIHJlcHJvZHVjaWJpbGl0eQ0Kc3BsaXQgPC0gc2FtcGxlLnNwbGl0KGRmJE1pbiwgU3BsaXRSYXRpbyA9IDAuNykNCnRyYWluIDwtIHN1YnNldChkZiwgc3BsaXQgPT0gVFJVRSkNCnRlc3QgPC0gc3Vic2V0KGRmLCBzcGxpdCA9PSBGQUxTRSkNCg0KbW9kZWwgPC0gbG0oTWluIH4gVGVhbSArIFBvcyArIE1QICsgR2xzICsgQXN0ICsgQ3JkWSArIENyZFIsIGRhdGEgPSB0cmFpbikNCnN1bW1hcnkobW9kZWwpDQoNCnByZWRpY3Rpb25zIDwtIHByZWRpY3QobW9kZWwsIHRlc3QpDQoNCiMgQ2FsY3VsYXRlIHJvb3QgbWVhbiBzcXVhcmVkIGVycm9yIChSTVNFKQ0Kcm1zZSA8LSBzcXJ0KG1lYW4oKHRlc3QkTWluIC0gcHJlZGljdGlvbnMpXjIpKQ0KDQojIFByaW50IFJNU0UNCnByaW50KHJtc2UpDQoNCndlaWdodHMgPC0gYygwLjIsIDAuMiwgMC4zLCAwLjE1LCAtMC4xLCAtMC4yLCAwLjAwMSkNCg0KZGYgPC0gZGYgJT4lDQogIG11dGF0ZShzdWNjZXNzID0gQWdlICogd2VpZ2h0c1sxXSArIE1QICogd2VpZ2h0c1syXSArIEdscyAqIHdlaWdodHNbM10gKyBBc3QgKiB3ZWlnaHRzWzRdICsgQ3JkWSAqIHdlaWdodHNbNV0gKyBDcmRSICogd2VpZ2h0c1s2XSArIE1pbiAqIHdlaWdodHNbN10pDQoNCmRmICU+JQ0KICB0b3BfbigxMCwgc3VjY2VzcykNCg0KYGBgDQoNCg0KYGBge3J9DQpsaWJyYXJ5KGRwbHlyKQ0KbGlicmFyeShiYXNlKQ0KDQojIEFzc3VtZSB0aGF0IHlvdSBoYXZlIGEgZGF0YSBmcmFtZSBjYWxsZWQgInBsYXllcnMiIHdpdGggYSBjb2x1bW4gY2FsbGVkICJuYXRpb25hbGl0eSINCiMgVGhpcyBjb2x1bW4gY29udGFpbnMgdGhlIG5hdGlvbmFsaXR5IG9mIGVhY2ggcGxheWVyDQpkZiA8LSBkZiAlPiUgbXV0YXRlKE5hdGlvbiA9IGljb252KE5hdGlvbiwgImxhdGluMSIsICJBU0NJSSIsIHN1YiA9ICIiKSkNCiMgU2VwYXJhdGUgZG9tZXN0aWMgYW5kIGZvcmVpZ24gcGxheWVycw0KZG9tZXN0aWNfcGxheWVycyA8LSBmaWx0ZXIoZGYsIE5hdGlvbiA9PSAiZW5n77+9RU5HIikNCmZvcmVpZ25fcGxheWVycyA8LSBmaWx0ZXIoZGYsIE5hdGlvbiAhPSAiZW5n77+9RU5HIikNCg0KDQpgYGA=</div>
 
 
 
