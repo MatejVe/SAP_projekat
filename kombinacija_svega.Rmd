@@ -12,7 +12,8 @@ knitr::opts_chunk$set(echo = TRUE)
 Učitavanje potrebnih paketa:
 ```{r}
 library(tidyverse)
-library(ggplot2)
+library("ggpubr")
+library(knitr)
 ```
 
 ## Inicijalno učitavanje i obrada podataka
@@ -28,6 +29,13 @@ Pogledajmo sada naš dataset:
 ```{r}
 players
 ```
+```{r}
+str(players)
+```
+```{r}
+summary(players)
+```
+
 Podatci izgledaju dobro i možemo primjetiti par stvari:
 1. Igrači koji su odigrali 0 utakmica (MP=0) nemaju podatke o golovima, asistencijama i sličnim kolumnama (X90s, GLs, ... = NA) te za neke fali informacija o minutama igre. Ovo nije problem jer to znači da ove vrijednosti koje fale trebaju biti 0.
 2. Za određene igrače fali informacija o njihovim godinama. Ovo predstavlja problem koji se treba riješiti. Najjednostavnije rješenje ovog problema bi bilo pronalazak tih informacija i ručna nadopuna. Postoje i razni drugi načini nadopune podataka koji fale, načini koji su utemeljeni na statističkim svojstvima svih podataka. Mi smo se odlučili za pristup izbacivanja takvih podataka - dataset je dovoljno velik (691 podatak), i broj igrača za koje ne postoji informacija o godinama (njih 4) je dovoljno malen da bi ovakav pristup funkcionirao.
@@ -42,94 +50,163 @@ Da bi odgovorili na ovaj zadatak, potrebne su nam samo dvije kolumne iz našeg d
 ```{r}
 players <- players %>% mutate(Min = coalesce(Min, 0))
 ```
-Prije konkretne analize, pogledajmo distribuciju odigranih minuta.
+Prije konkretne analize, pogledajmo distribuciju odigranih minuta mladih igrača.
 
 ```{r}
-hist(players$Min, breaks=20, main="Distribution of played minutes", xlab="Minutes", ylab="Counts")
+# Izdvajanje mladih igrača (do 25 godina)
+young_players <- players[players$Age <= 25,]
+
+hist(players$Min, breaks=20, main="Distribution of played minutes for young players", xlab="Minutes", ylab="Counts")
 ```
 Iz grafa možemo zaključiti da velik broj igrača ne igra utakmice ili igraju jako malo, dok uspješniji igrači imaju podjednaku distribuciju odigranih minuta sve do 3500.
 
 Pregled distribucija minuta po timovima je malo složenija vizualizacija - iskoristit ćemo box-plot po timovima.
-```{r}
-par(las=2) # rotate x-axis labels
-boxplot(Min ~ Team, data = df, width = 0.8, col = "blue")
 
+```{r}
+ggboxplot(young_players, x = "Team", y = "Min", color = "Team", font.label = list(size=20)) + scale_x_discrete(labels = c("ARS", "AVL", "BRE", "BRI", "BUR", "CHE", "CRY", "EVE", "LEE", "LEI", "LIV", "MCI", "MUN", "NEW", "NOR", "SH", "TOT", "WAT", "WHU", "WOL")) + rotate_x_text()
 ```
 
-Pogledajmo još distribuciju odigranih minuta za određenu ekipu, u ovom slučaju Liverpool.
+Pogledajmo još distribuciju odigranih minuta za određenu ekipu, recimo Leicester City.
 ```{r}
-liverpool_players <- players[players$Team == "Liverpool",]
-hist(liverpool_players$Min, breaks=20, main="Distribution of played minutes for Liverpool", xlab="Minutes", ylab="Counts")
+leicester_young_players <- young_players[young_players$Team == "Leicester City",]
+hist(leicester_young_players$Min, breaks=20, main="Distribution of played minutes by young players for Leicester City", xlab="Minutes", ylab="Counts")
 ```
 
 Krenimo sada s analizom pitanja. Da bi odgovorili na ovo pitanje moramo usporediti distribuciju odigranih minuta svih timova premier lige (njih 20). Činjenica da je broj skupina koje uspoređujemo veći od 2 odbacuje mogućnost korištenja "jednostavnih" statističkih testova poput t-testa. Metoda koja nam omogućuje statistički odgovor na zadano pitanje je ANOVA (Analysis of Variance). 
 
 ANOVA je statistički test koji nam govori jesu li sredine dviju ili više populacija jednake, te je generalizacija t-testa na više od dvije distribucije. Drugim riječima, nulta hipoteza ANOVE je da su srednje vrijednosti svih testiranih populacija jednake, a sukladna p-vrijednost nam govori kolika je vjerojatnost da dobijemo viđenu populacijom pod pretpostavkom nasumičnog uzorkovanja iz distribucija jednakih srednjih vrijednosti.
 
-ANOVA 
+ANOVA koristi sljedeće pretpostavke:
+1. Normalnost: podaci moraju biti normalno distribuirani u svakoj skupini.
+2. Homogenost varijance: varijanca svake skupine mora biti jednaka.
+3. Nezavisnost: podaci u svakoj skupini moraju biti neovisni jedni od drugih.
+Iz prijašnjih grafova, možemo vidjeti da pretpostavka normalnosti ne vrijedi (formalno, mogli bi odraditi neki test i provjeriti statistički da dane distribucije populacija nisu normalne, no u ovom slučaju mislimo da je to vrlo jasno vizualno vidljivo). To znači da ANOVA vjerojatno neće dati dobre rezultate.
 
-Implementacija ANOVE:
+Srećom, postoji alternativa: neparametarski test, Kruskal-Wallisov test. Kruskal-Wallis test će izračunati p-vrijednost koja odgovara na pitanje: postoji li značajna razlika u broju odigranih minuta među timovima za mlađe igrače. Ako je p-vrijednost manja od zadane razine značajnosti (obično 0,05), onda možemo zaključiti da postoji značajna razlika u broju odigranih minuta među timovima za mlađe igrače. Uvjet provođenja Kruskal-Wallisovog testa je da veličina svakog uzorka mora biti barem 5, što u našem slučaju vrijedi.
+
+1. $H_0$: medijani distribucija svih uzoraka su jednaki.
+$H_1$: barem dba medijana nisu jednaka
+2. Uzmimo razinu značajnosti $\alpha = 0.05$.
 
 ```{r}
-# Filtriranje podataka tako da ostaju samo mladi igrači (do 25 godina)
-players_young <- players %>% filter(Age <= 25)
+# Kruskal-Wallis test
+result <- kruskal.test(Min ~ Team, data = young_players)
 
-# Izračunavanje prosječnog broja odigranih minuta po ekipi
-mp_by_team <- players_young %>% 
-  group_by(Team) %>% 
-  summarize(mean_mp = mean(Min))
+print(result)
+```
+Dobivena p-vrijednost je $0.6737$, mnogo veća od $0.05$. Ne možemo odbaciti nultu hipotezu $H_0$ te zaključujemo da ne postoji razlika među odigranim minutama mladih igrača između timova premier lige.
 
-# Izvršavanje ANOVA testa za prosječan broj odigranih minuta
-model <- aov(Min ~ Team, data = players_young)
 
-# Prikaz rezultata testa
+## 2. zadatak: dobivaju li u prosjeku više žutih kartona napadači ili igrači veznog reda?
+
+Da bi odgovorili na ovo pitanje, koristit ćemo tri kolumne u zadanom datasetu: broj dobivenih žutih karton (CrdY), poziciju igrača (Pos), te broj odigranih utakmica (MP). 
+
+Kao i prije, imamo problem s jednom od kolumni: neke vrijednosti CrdY fale. Za igrače koji nisu odigrali niti jednu minutu utakmica logično da vrijednost broja dobivenih žutih kartona fali. Taj broj dobivenih žutih kartona je tehnički 0, no smatramo da ovdje treba razlikovati igrače koji su odigrali neke utakmice i nisu dobili niti jedan žuti karton (valjana pretpostavka je da igraju "čisto", ne krše protivnike), za razliku od igrača koji uopče nisu igrali - ne možemo zaključiti da igraju "čisto" ili "prljavo". Igrače koji nisu uopće igrali ćemo izbaciti.
+
+```{r}
+players_who_played <- players[players$MP > 0, c("Player", "Team", "Pos", "MP", "CrdY")]
+```
+
+Dalje, vjerojatnost da igrač dobije žuti karton sigurno raste s količinom odigranih minuta. No, kako igrač može dobiti maksimalno 2 žuta kartona po utakmici, više smisla ima gledati broj žutih kartona po utakmici. U tu svrhu, umjesto direktne usporedbe broja žutih kartona, uspoređivati ćemo broj žutih kartona po broju odigranih utakmica (nazovimo to CrdY.MP)
+
+```{r}
+players_who_played$CrdY.MP <- players_who_played$CrdY / players_who_played$MP
+```
+Pogledajmo kako izgledaju ti podaci.
+```{r}
+summary(players_who_played)
+```
+```{r}
+position_counts <- table(players_who_played$Pos)
+kable(position_counts, caption = "Table 1: Number of players by their positions", align="c")
+```
+Napokon, preostaje diskusija o kolumni pozicije (Pos). Ona je vrlo jednostavna: opisuje koju poziciju igra koji igrač. Pojedini igrači su svrstani u više kategorija, poput napadača i veznog igrača. U ovom zadatku, nas interesiraju samo napadači (FW) te vezni igrači (MF). Iz tablice 1 možemo vidjeti da imamo podatke o 83 napadača, 116 veznih igrača, 59 napadača/veznih, 39 veznih/napadača. Kod kombiniranih pozicija, pretpostavljamo da je prvo napisana ona pozicija koju napadač preferira/većinom igra, te ćemo tako napadača/veznog (FW,MF) igrača svrstati kao čistog napadača (FW), a veznog/napadača (MF,FW) kao veznog igrača (MF).
+
+```{r}
+players_who_played$Pos[players_who_played$Pos == "FW,MF"] <- "FW"
+players_who_played$Pos[players_who_played$Pos == "MF,FW"] <- "MF"
+midfielders_and_forwards = players_who_played[players_who_played$Pos == "FW" | players_who_played$Pos == "MF",]
+```
+
+Kao i u prijašnjem zadatku, prije ikakve analize vizualizirat ćemo dane podatke.
+```{r}
+# Create a histogram of the column 'CrdY.MP' split by the column 'MP'
+ggplot(midfielders_and_forwards, aes(x = CrdY.MP, fill = Pos)) +
+  geom_histogram(position = "dodge") + xlab("Yellow cards per matches played")
+```
+```{r}
+ggboxplot(midfielders_and_forwards, x = "Pos", y = "CrdY.MP", 
+          color = "Pos", palette = c("#00AFBB", "#E7B800"),
+          ylab = "Yellow cards per matches played", xlab = "Player position")
+```
+Dvije populacije koje uspoređujemo nisu normalne. To znači da ne možemo koristiti standardan t-test. U spas ponovno dolaze neparametarski testovi - specifično Wilcoxonov rank-sum test. On uspoređuje medijan dva uzorka. Test je baziran na ukupnim rangovima observacija, a ne na konkretnim vrijednostima.
+
+Postava eksperimenta je standardna:
+- Nulta hipoteza $H_0$: medijani su jednaki
+- Alternativna hipoteza $H_1$: medijan veznih igrača je veći od medijana napadača
+- Uzimamo razinu signifikantnosti od $\alpha=0.05$
+
+```{r}
+wilcox.test(midfielders_and_forwards$CrdY.MP[midfielders_and_forwards$Pos == "FW"], midfielders_and_forwards$CrdY.MP[midfielders_and_forwards$Pos == "MF"], alternative = "less")
+```
+Dobivena p-vrijednost iznosi 0.0028, stoga možemo s razinom signifikantnosti od $1%$ odbaciti nultu hipotezu.
+
+## 3. zadatak: možete li na temelju zadanih parametara odrediti uspješnost pojedinog igrača?
+
+Predvidljivost uspješnosti pojedinog igrača zahtjeva definiciju uspješnosti. Budući da je zadani dataset relativno slabo informativan (nedostaju informacije poput broju dodavanja, broju driblinga i slično, što definira uspješnost braniča) odlučili smo se za jednostavnu metriku uspješnosti: broj zabijenih golova + broj asistencija. Također, predviđanje će biti odrađeno samo na napadačima jer pozicija napadača je definirana brojem zabijenih golova i asistencijama, dok braniči i vezni igrači generalno imaju nešto drugačije definicije uspješnosti.
+
+Kao i u prijašnjem zadatku, uzimamo samo igrače koji su odigrali barem jednu utakmicu. Također, igrače kojima piše da igraju poziciju "FW,MF" svrstavamo u napadače.
+
+```{r}
+forward_players = players[players$MP > 0 & (players$Pos == "FW" | players$Pos == "FW,MF"),]
+
+# Create new column Gls+Ast
+forward_players$Gls_Ast <- forward_players$Gls + forward_players$Ast
+
+# Perform linear regression
+model <- lm(Gls_Ast ~ MP + Min + PK + CrdY + CrdR + xG + xA, data = forward_players)
+
+# Print summary of model
 summary(model)
-```
-
-Drugo pitanje - osnovna analiza:
-```{r}
-# Izračunavanje prosječnog broja dobivenih žutih kartona po poziciji
-yellow_cards_by_pos <- players %>% 
-  group_by(Pos) %>% 
-  summarize(mean_yellow_cards = mean(CrdY))
-
-# Prikaz rezultata
-yellow_cards_by_pos
 
 ```
 
-Uporaba ANOVA-e (mješane pozicije poput (FW/MF) su izbačene):
 ```{r}
-# Filtriranje podataka tako da ostaju samo igrači veznog reda i napadači
-players_fw_mf <- players %>% filter(Pos %in% c("FW", "MF"))
+# Create new column 'Gls+Ast'
+forward_players$GlsAst <- forward_players$Gls + forward_players$Ast
 
-# Izvršavanje ANOVA testa za prosječan broj dobivenih žutih kartona po poziciji
-model <- aov(CrdY ~ as.factor(Pos), data = players_fw_mf)
+# Split data into train and test sets
+set.seed(123)  # for reproducibility
+train_index <- sample(1:nrow(forward_players), 0.9*nrow(forward_players))
+train_data <- forward_players[train_index, ]
+test_data <- forward_players[-train_index, ]
 
-# Prikaz p-vrijednosti
+# Perform linear regression on train data
+model <- lm(GlsAst ~ MP + Min + PK + CrdY + CrdR + xG + xA, data = train_data)
+
+# Print summary of model
 summary(model)
-```
 
-Treći zadatak, preostaje problem kako pronaći neku metriku greške kako bi izračunali uspješnost modela:
-```{r}
-# Definiranje metrike uspješnosti igrača
-players <- players %>%
-  mutate(Success = 0.5 * Gls / X90s + 0.5 * Ast / X90s - 0.1 * CrdY / X90s - 0.2 * CrdR / X90s)
+# Make predictions on test data
+predictions <- predict(model, newdata = test_data)
 
-# Podjela podataka na skup za trening i skup za test
-set.seed(123)
-players <- players %>%
-  mutate(Split = if_else(runif(n()) < 0.8, "Train", "Test"))
+# Print R-squared
+r_squared <- summary(model)$r.squared
+print(paste0("R-Squared value: ", r_squared))
 
-train_players = players %>% filter(Split == "Train")
+# Print mean squared error
+mse <- mean((predictions - test_data$GlsAst)^2)
+print(paste0("Mean Squared Error: ", mse))
 
-# Izgradnja modela linearne regresije
-model <- lm(Success ~., data = players %>% filter(Split == "Train"))
+# Print root mean squared error
+rmse <- sqrt(mean((predictions - test_data$GlsAst)^2))
+print(paste0("Root Mean Squared Error: ", rmse))
 
-# Predviđanje uspješnosti pojedinih igrača
-predictions <- predict(model, players %>% filter(Split == "Test"))
+# Print adjusted R-squared value
+adj_r_squared <- summary(model)$adj.r.squared
+print(paste0("Adjusted R-Squared value: ", adj_r_squared))
 
-# Prikaz rezultata
-predictions
-
+# Print AIC and BIC
+print(paste0("AIC: ",AIC(model)))
+print(paste0("BIC: ",BIC(model)))
 ```
