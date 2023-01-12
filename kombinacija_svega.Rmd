@@ -1,21 +1,76 @@
 ---
-title: "R Notebook"
-output: html_notebook
+title: "Eigenvektori"
+author: "MVedak"
+date: "2022-12-06"
+output: html_document
 ---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Učitavanje potrebnih paketa:
+```{r}
+library(tidyverse)
+library(ggplot2)
+```
+
+## Inicijalno učitavanje i obrada podataka
+Prije izvoda ikakve analize potrebno je učitati i očistiti podatke. Učitavanje podataka je vrlo jednostavno, no prije konkretnog korištenja potrebno je modificirati učitani DataFrame kako bi analiza bila moguća.
+
+Prvi problem koji se pojavio je činjenica da R automatski prepoznaje tip podataka u kolumnama, te je kolumni "Min" prepoznao kao kolumnu koja sadrži stringove, dok je ona u realnosti numerička (do ovoga dolazi jer kolumna sadrži ',' character). Nažalost, ovaj problem se ne može instantno riješiti funkcijom as.numeric već moramo prije toga eliminirati ',' koji odvaja tisućice od stotica.
+
+```{r}
+players <- read.csv("Statistika nogometaša engleske Premier lige.csv", stringsAsFactors = FALSE)
+players$Min <- as.numeric(gsub(",", "", players$Min))
+```
+Pogledajmo sada naš dataset:
+```{r}
+players
+```
+Podatci izgledaju dobro i možemo primjetiti par stvari:
+1. Igrači koji su odigrali 0 utakmica (MP=0) nemaju podatke o golovima, asistencijama i sličnim kolumnama (X90s, GLs, ... = NA) te za neke fali informacija o minutama igre. Ovo nije problem jer to znači da ove vrijednosti koje fale trebaju biti 0.
+2. Za određene igrače fali informacija o njihovim godinama. Ovo predstavlja problem koji se treba riješiti. Najjednostavnije rješenje ovog problema bi bilo pronalazak tih informacija i ručna nadopuna. Postoje i razni drugi načini nadopune podataka koji fale, načini koji su utemeljeni na statističkim svojstvima svih podataka. Mi smo se odlučili za pristup izbacivanja takvih podataka - dataset je dovoljno velik (691 podatak), i broj igrača za koje ne postoji informacija o godinama (njih 4) je dovoljno malen da bi ovakav pristup funkcionirao.
+
+```{r}
+players <- players[!is.na(players$Age),]
+```
+
+## 1. zadatak: postoji li razlika u broju odigranih minuta mladih igrača (do 25 godina) među premierligaškim ekipama?
+Da bi odgovorili na ovaj zadatak, potrebne su nam samo dvije kolumne iz našeg dataseta: kolumna o godinama (Age) te kolumna o odigranim minutama (Min). Kolumnu Age smo već očistili od nepostojećih podataka, dok kolumnu Min trebamo popraviti - popuniti nepostojeće podatke nulama. Učinimo to sada.
+
+```{r}
+players <- players %>% mutate(Min = coalesce(Min, 0))
+```
+Prije konkretne analize, pogledajmo distribuciju odigranih minuta.
+
+```{r}
+hist(players$Min, breaks=20, main="Distribution of played minutes", xlab="Minutes", ylab="Counts")
+```
+Iz grafa možemo zaključiti da velik broj igrača ne igra utakmice ili igraju jako malo, dok uspješniji igrači imaju podjednaku distribuciju odigranih minuta sve do 3500.
+
+Pregled distribucija minuta po timovima je malo složenija vizualizacija - iskoristit ćemo box-plot po timovima.
+```{r}
+par(las=2) # rotate x-axis labels
+boxplot(Min ~ Team, data = df, width = 0.8, col = "blue")
+
+```
+
+Pogledajmo još distribuciju odigranih minuta za određenu ekipu, u ovom slučaju Liverpool.
+```{r}
+liverpool_players <- players[players$Team == "Liverpool",]
+hist(liverpool_players$Min, breaks=20, main="Distribution of played minutes for Liverpool", xlab="Minutes", ylab="Counts")
+```
+
+Krenimo sada s analizom pitanja. Da bi odgovorili na ovo pitanje moramo usporediti distribuciju odigranih minuta svih timova premier lige (njih 20). Činjenica da je broj skupina koje uspoređujemo veći od 2 odbacuje mogućnost korištenja "jednostavnih" statističkih testova poput t-testa. Metoda koja nam omogućuje statistički odgovor na zadano pitanje je ANOVA (Analysis of Variance). 
+
+ANOVA je statistički test koji nam govori jesu li sredine dviju ili više populacija jednake, te je generalizacija t-testa na više od dvije distribucije. Drugim riječima, nulta hipoteza ANOVE je da su srednje vrijednosti svih testiranih populacija jednake, a sukladna p-vrijednost nam govori kolika je vjerojatnost da dobijemo viđenu populacijom pod pretpostavkom nasumičnog uzorkovanja iz distribucija jednakih srednjih vrijednosti.
+
+ANOVA 
 
 Implementacija ANOVE:
 
 ```{r}
-# Učitavanje potrebnih paketa
-library(tidyverse)
-
-# Učitavanje podataka o igračima
-players = read.csv("Statistika nogometaša engleske Premier lige.csv", stringsAsFactors = FALSE)
-players$Min <- as.numeric(gsub(",", "", players$Min))
-players <- players %>% mutate(Min = coalesce(Min, 0))
-players <- players[!is.na(players$Team),]
-players <- players[!is.na(players$Age),]
-
 # Filtriranje podataka tako da ostaju samo mladi igrači (do 25 godina)
 players_young <- players %>% filter(Age <= 25)
 
@@ -29,25 +84,6 @@ model <- aov(Min ~ Team, data = players_young)
 
 # Prikaz rezultata testa
 summary(model)
-```
-
-Implementacija Tukey HSD-a (NE RADI!, treba provjeriti glht funkciju... vjerojatno nećemo ovo ostaviti u završnom reportu):
-
-```{r}
-# Učitavanje potrebnih paketa
-library(tidyverse)
-library(multcomp)
-
-# Izvršavanje ANOVA testa za prosječan broj odigranih minuta
-model <- aov(Min ~ as.factor(Team), data = players_young)
-
-# Izvršavanje Tukeys HSD testa
-tukeys_hsd <- glht(model, linfct = mcp(Team = "Tukey"))
-
-# Prikaz rezultata testa
-summary(tukeys_hsd)
-
-
 ```
 
 Drugo pitanje - osnovna analiza:
@@ -72,4 +108,28 @@ model <- aov(CrdY ~ as.factor(Pos), data = players_fw_mf)
 
 # Prikaz p-vrijednosti
 summary(model)
+```
+
+Treći zadatak, preostaje problem kako pronaći neku metriku greške kako bi izračunali uspješnost modela:
+```{r}
+# Definiranje metrike uspješnosti igrača
+players <- players %>%
+  mutate(Success = 0.5 * Gls / X90s + 0.5 * Ast / X90s - 0.1 * CrdY / X90s - 0.2 * CrdR / X90s)
+
+# Podjela podataka na skup za trening i skup za test
+set.seed(123)
+players <- players %>%
+  mutate(Split = if_else(runif(n()) < 0.8, "Train", "Test"))
+
+train_players = players %>% filter(Split == "Train")
+
+# Izgradnja modela linearne regresije
+model <- lm(Success ~., data = players %>% filter(Split == "Train"))
+
+# Predviđanje uspješnosti pojedinih igrača
+predictions <- predict(model, players %>% filter(Split == "Test"))
+
+# Prikaz rezultata
+predictions
+
 ```
