@@ -169,6 +169,9 @@ model <- lm(Gls_Ast ~ MP + Min + PK + CrdY + CrdR + xG + xA, data = forward_play
 # Print summary of model
 summary(model)
 
+# Print AIC and BIC
+print(paste0("AIC: ",AIC(model)))
+print(paste0("BIC: ",BIC(model)))
 ```
 
 ```{r}
