@@ -19,7 +19,7 @@ Ast : Assits per 90 mins
 G+A : Goals and Assists per 90 mins
 G-PK : Goals minus Penalty Kicks made per 90 mins
 G+A-PK: Goals plus Assists minus Penalty Kicks made per 90 mins
-xG : Expected Golas
+xG : Expected Goals
 npxG : Non-Penalty Expected Goals
 xA : Expected Assits
 npxG+xA : Non-Penalty Expected Goals plus Expected Assists

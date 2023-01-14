@@ -2,7 +2,9 @@
 title: "Eigenvektori"
 author: "MVedak"
 date: "2022-12-06"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -11,10 +13,15 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Učitavanje potrebnih paketa:
 
-```{r}
+```{r, echo=FALSE}
 library(tidyverse)
 library("ggpubr")
 library(knitr)
+library(ggplot2)
+library(broom)
+library(caret)
+library(nortest)
+library(stringr)
 ```
 
 ## Inicijalno učitavanje i obrada podataka
@@ -31,7 +38,7 @@ players$Min <- as.numeric(gsub(",", "", players$Min))
 Pogledajmo sada naš dataset:
 
 ```{r}
-players
+head(players)
 ```
 
 ```{r}
@@ -45,7 +52,7 @@ summary(players)
 Podatci izgledaju dobro i možemo primjetiti par stvari:
 
 1. Igrači koji su odigrali 0 utakmica (MP=0) nemaju podatke o golovima, asistencijama i sličnim kolumnama (X90s, GLs, ... = NA) te za neke fali informacija o minutama igre. Ovo nije problem jer to znači da ove vrijednosti koje fale trebaju biti 0.
-2. Za određene igrače fali informacija o njihovim godinama. Ovo predstavlja problem koji se treba riješiti. Najjednostavnije rješenje ovog problema bi bilo pronalazak tih informacija i ručna nadopuna. Postoje i razni drugi načini nadopune podataka koji fale, načini koji su utemeljeni na statističkim svojstvima svih podataka. Mi smo se odlučili za pristup izbacivanja takvih podataka - dataset je dovoljno velik (691 podatak), i broj igrača za koje ne postoji informacija o godinama (njih 4) je dovoljno malen da bi ovakav pristup funkcionirao.
+2. Za određene igrače fali informacija o njihovim godinama. Ovo predstavlja problem koji treba riješiti. Najjednostavnije rješenje ovog problema bi bilo pronalazak tih informacija i ručna nadopuna. Postoje i razni drugi načini nadopune podataka koji fale, načini koji su utemeljeni na statističkim svojstvima svih podataka. Mi smo se odlučili za pristup izbacivanja takvih podataka - dataset je dovoljno velik (691 podatak), i broj igrača za koje ne postoji informacija o godinama (njih 4) je dovoljno malen da bi ovakav pristup funkcionirao.
 
 ```{r}
 players <- players[!is.na(players$Age),]
@@ -76,11 +83,27 @@ Pregled distribucija minuta po timovima je malo složenija vizualizacija - iskor
 ggboxplot(young_players, x = "Team", y = "Min", color = "Team", font.label = list(size=20)) + scale_x_discrete(labels = c("ARS", "AVL", "BRE", "BRI", "BUR", "CHE", "CRY", "EVE", "LEE", "LEI", "LIV", "MCI", "MUN", "NEW", "NOR", "SH", "TOT", "WAT", "WHU", "WOL")) + rotate_x_text()
 ```
 
-Pogledajmo još distribuciju odigranih minuta za određenu ekipu, recimo Leicester City.
+Pogledajmo još distribuciju odigranih minuta za određenu ekipu, recimo West Ham United.
 
 ```{r}
-leicester_young_players <- young_players[young_players$Team == "Leicester City",]
-hist(leicester_young_players$Min, breaks=20, main="Distribution of played minutes by young players for Leicester City", xlab="Minutes", ylab="Counts")
+westham_young_players <- young_players[young_players$Team == "West Ham United",]
+hist(westham_young_players$Min, breaks=20, main="Distribution of played minutes by young players for West Ham United", xlab="Minutes", ylab="Counts")
+```
+
+Iz danog grafa mislimo da je jasno vidljivo da distribucija uzorka ne prati normalnu distribuciju. Ne-normalnost distribucija može se testirati Lilliefors testom (podaci moraju biti neovisni, i veličina uzorka mora biti dovoljno velika). Nulta hipoteza test je da podaci dolaze iz normalne distribucije, dok je alternativna hipoteza da ne dolaze.
+
+```{r}
+teams <- unique(young_players$Team)
+
+for (team in teams) {
+  
+  team_data <- subset(young_players, Team == team)
+  
+  lillie_test <- lillie.test(team_data$Min)
+  
+  print(paste("Team:", team))
+  print(lillie_test)
+}
 ```
 
 Krenimo sada s analizom pitanja. Da bi odgovorili na ovo pitanje moramo usporediti distribuciju odigranih minuta svih timova premier lige (njih 20). Činjenica da je broj skupina koje uspoređujemo veći od 2 odbacuje mogućnost korištenja "jednostavnih" statističkih testova poput t-testa. Metoda koja nam omogućuje statistički odgovor na zadano pitanje je ANOVA (Analysis of Variance).
@@ -92,12 +115,12 @@ ANOVA koristi sljedeće pretpostavke:
 1. Normalnost: podaci moraju biti normalno distribuirani u svakoj skupini.
 2. Homogenost varijance: varijanca svake skupine mora biti jednaka.
 3. Nezavisnost: podaci u svakoj skupini moraju biti neovisni jedni od drugih.
-Iz prijašnjih grafova, možemo vidjeti da pretpostavka normalnosti ne vrijedi (formalno, mogli bi odraditi neki test i provjeriti statistički da dane distribucije populacija nisu normalne, no u ovom slučaju mislimo da je to vrlo jasno vizualno vidljivo). To znači da ANOVA vjerojatno neće dati dobre rezultate.
+Iz prijašnjih grafova, možemo vidjeti da pretpostavka normalnosti ne vrijedi za sve ekipe, štoviše za većinu ekipa ne vrijedi. To znači da ANOVA vjerojatno neće dati dobre rezultate.
 
 Srećom, postoji alternativa: neparametarski test, Kruskal-Wallisov test. Kruskal-Wallis test će izračunati p-vrijednost koja odgovara na pitanje: postoji li značajna razlika u broju odigranih minuta među timovima za mlađe igrače. Ako je p-vrijednost manja od zadane razine značajnosti (obično 0,05), onda možemo zaključiti da postoji značajna razlika u broju odigranih minuta među timovima za mlađe igrače. Uvjet provođenja Kruskal-Wallisovog testa je da veličina svakog uzorka mora biti barem 5, što u našem slučaju vrijedi.
 
 1. $H_0$: medijani distribucija svih uzoraka su jednaki.
-$H_1$: barem dba medijana nisu jednaka
+$H_1$: barem dva medijana nisu jednaka
 2. Uzmimo razinu značajnosti $\alpha = 0.05$.
 
 ```{r}
@@ -160,7 +183,7 @@ ggboxplot(midfielders_and_forwards, x = "Pos", y = "CrdY.MP",
 
 Dvije populacije koje uspoređujemo nisu normalne. To znači da ne možemo koristiti standardan t-test. U spas ponovno dolaze neparametarski testovi - specifično Wilcoxonov rank-sum test. On uspoređuje medijan dva uzorka. Test je baziran na ukupnim rangovima observacija, a ne na konkretnim vrijednostima.
 
-Postava eksperimenta je standardna:
+Postava eksperimenta je slijedeća:
 
 - Nulta hipoteza $H_0$: medijani su jednaki
 - Alternativna hipoteza $H_1$: medijan veznih igrača je veći od medijana napadača
@@ -170,37 +193,29 @@ Postava eksperimenta je standardna:
 wilcox.test(midfielders_and_forwards$CrdY.MP[midfielders_and_forwards$Pos == "FW"], midfielders_and_forwards$CrdY.MP[midfielders_and_forwards$Pos == "MF"], alternative = "less")
 ```
 
-Dobivena p-vrijednost iznosi 0.0028, stoga možemo s razinom signifikantnosti od $1%$ odbaciti nultu hipotezu.
+Dobivena p-vrijednost iznosi 0.0028, stoga možemo s razinom signifikantnosti od $1\%$ odbaciti nultu hipotezu.
 
 ## 3. zadatak: možete li na temelju zadanih parametara odrediti uspješnost pojedinog igrača?
 
 Predvidljivost uspješnosti pojedinog igrača zahtjeva definiciju uspješnosti. Budući da je zadani dataset relativno slabo informativan (nedostaju informacije poput broju dodavanja, broju driblinga i slično, što definira uspješnost braniča) odlučili smo se za jednostavnu metriku uspješnosti: broj zabijenih golova + broj asistencija. Također, predviđanje će biti odrađeno samo na napadačima jer pozicija napadača je definirana brojem zabijenih golova i asistencijama, dok braniči i vezni igrači generalno imaju nešto drugačije definicije uspješnosti.
+
+U linearnu regresiju su ugrađene neke pretpostavke koje valja spomenuti:
+1. Linearnost zavisnih varijabli o varijablama koje objašnjavaju
+2. Normalnost grešaka
+3. Neovisnost grešaka
+4. Homoskedastičnost (jednakost varijanci??)
+5. Ne smije biti multikolinearnosti
 
 Kao i u prijašnjem zadatku, uzimamo samo igrače koji su odigrali barem jednu utakmicu. Također, igrače kojima piše da igraju poziciju "FW,MF" svrstavamo u napadače.
 
 ```{r}
 forward_players = players[players$MP > 0 & (players$Pos == "FW" | players$Pos == "FW,MF"),]
 
-# Create new column Gls+Ast
-forward_players$Gls_Ast <- forward_players$Gls + forward_players$Ast
-
-# Perform linear regression
-model <- lm(Gls_Ast ~ MP + Min + PK + CrdY + CrdR + xG + xA, data = forward_players)
-
-# Print summary of model
-summary(model)
-
-# Print AIC and BIC
-print(paste0("AIC: ",AIC(model)))
-print(paste0("BIC: ",BIC(model)))
-```
-
-```{r}
 # Create new column 'Gls+Ast'
 forward_players$GlsAst <- forward_players$Gls + forward_players$Ast
 
 # Split data into train and test sets
-set.seed(123)  # for reproducibility
+set.seed(110)  # for reproducibility
 train_index <- sample(1:nrow(forward_players), 0.9*nrow(forward_players))
 train_data <- forward_players[train_index, ]
 test_data <- forward_players[-train_index, ]
@@ -210,27 +225,78 @@ model <- lm(GlsAst ~ MP + Min + PK + CrdY + CrdR + xG + xA, data = train_data)
 
 # Print summary of model
 summary(model)
-
-# Make predictions on test data
-predictions <- predict(model, newdata = test_data)
-
-# Print R-squared
-r_squared <- summary(model)$r.squared
-print(paste0("R-Squared value: ", r_squared))
-
-# Print mean squared error
-mse <- mean((predictions - test_data$GlsAst)^2)
-print(paste0("Mean Squared Error: ", mse))
-
-# Print root mean squared error
-rmse <- sqrt(mean((predictions - test_data$GlsAst)^2))
-print(paste0("Root Mean Squared Error: ", rmse))
-
-# Print adjusted R-squared value
-adj_r_squared <- summary(model)$adj.r.squared
-print(paste0("Adjusted R-Squared value: ", adj_r_squared))
-
-# Print AIC and BIC
-print(paste0("AIC: ",AIC(model)))
-print(paste0("BIC: ",BIC(model)))
 ```
+
+```{r}
+tidy(model)
+```
+
+Provjerimo prvo kakva je distribucija reziduala.
+
+```{r}
+residuals <- residuals(model)
+
+ggplot(data = data.frame(residuals), aes(x = residuals)) + geom_histogram(binwidth=0.5) + ggtitle("Distribution of Residuals")
+```
+
+Rezultati linearni regresije su očekivani: očekivani golovi i očekivane asistencije najviše doprinose našoj definiciji uspješnosti te možemo zaključiti da je broj golova liarno ovisan o te dvije varijable na razini značajnosti boljoj od $1\%$. Pogledajmo tu linearnu ovisnost na grafu.
+
+```{r}
+ggplot(train_data, aes(x = xG + xA, y = GlsAst)) + geom_point() + geom_smooth(aes(y=GlsAst), method = "lm")
+```
+
+Jedan zanimljiv rezltat linearne regresije je taj što broj dobivenih crvenih kartona ima relativno velik utjecaj na konačan broj zabijenih golova i asistencija. Doduše, $p$-vrijednost CrdR kolumne je ipak 0.26 što je daleko od statistički značajnog. Svejedno, pogledajmo kako broj crvenih kartona utječe na broj zabijenih golova i asistencija.
+
+```{r}
+ggplot(train_data, aes(x = CrdR, y = GlsAst)) + geom_point() + geom_smooth(aes(y=GlsAst), method = "lm", se=F)
+```
+
+Odokativno, čini se da broj crvenih kartona ipak nije linearno koreliran s brojem zabijenih golova i asistencija.
+
+To možemo i potvrditi eliminacijom varijabli koje ne objašnjavaju varijablu nad kojom regresiramo.
+
+```{r}
+model2 <- step(model)
+summary(model2)
+```
+
+Pogledajmo sada kako generalizira naša istrenirana linearna regresija.
+
+```{r}
+predictions <- predict(model2, newdata = test_data)
+MSE <- mean((predictions - test_data$GlsAst)^2)
+print(MSE)
+```
+
+Prosječno kvadratno odstupanje je 3.52899.
+
+## 4. zadatak: Doprinose li sveukupnom uspjehu svoga tima više ”domaći” igrači (tj. igrači engleske nacionalnosti) ili strani igrači?
+
+Kao i u prošlome zadatku, analizu provodimo samo za napadače.
+
+```{r}
+forward_players$Nation <- str_sub(forward_players$Nation, -3)
+
+forward_players$Nationality <- ifelse(forward_players$Nation == "ENG", "national", "foreign")
+
+# Create a histogram of the column 'GlsAst' split by the column 'Nationality'
+ggplot(forward_players, aes(x = GlsAst, fill = Nationality)) +
+  geom_histogram(position = "dodge") + xlab("Goals scored + assists")
+```
+
+```{r}
+ggboxplot(forward_players, x = "Nationality", y = "GlsAst", 
+          color = "Nationality", palette = c("#00AFBB", "#E7B800"),
+          ylab = "Goals scored + assists", xlab = "Player's nationality")
+```
+
+Distribucije uzoraka očito nisu normalno distribuirane. To znači da ne možemo koristit standardan t-test, već moramo primjeniti neparametarsku metodu - Wilcoxon rank-sum test. Nulta hipoteza je da su dvije distribucije jednake, tj da nema signifikantne razlike između uspjeha nacionalnih i stranih igrača. Alternativna hipoteza je da postoji neka signifikantna razlika i to specifično da strani igrači doprinose više nego nacionalni (jednostrani test).
+Uzmimo razinu značajnosti $\alpha = 0.05$.
+
+```{r}
+result <- wilcox.test(GlsAst ~ Nationality, data = forward_players, alternative = "greater")
+
+result
+```
+
+Dobivena $p$-vrijednost iznosi $0.03575$. To znači da možemo zaključiti da strani igrači doprinose više no nacionalni igrači s razinom značajnosti od $5\%$.
