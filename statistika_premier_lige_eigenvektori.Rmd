@@ -204,10 +204,10 @@ U linearnu regresiju su ugrađene neke pretpostavke koje valja spomenuti:
 1. Linearnost zavisnih varijabli o varijablama koje objašnjavaju
 2. Normalnost grešaka
 3. Neovisnost grešaka
-4. Homoskedastičnost (jednakost varijanci??)
+4. Homoskedastičnost
 5. Ne smije biti multikolinearnosti
 
-Kao i u prijašnjem zadatku, uzimamo samo igrače koji su odigrali barem jednu utakmicu. Također, igrače kojima piše da igraju poziciju "FW,MF" svrstavamo u napadače.
+Kao i u prijašnjem zadatku, uzimamo samo igrače koji su odigrali barem jednu utakmicu. Također, igrače kojima piše da igraju poziciju "FW,MF" svrstavamo u napadače. Kolumne koje smo uzeli kao mogući predviđatelji zabijenih golova i asistencija su: Matches Played (MP), Minutes played (Min), Penalty Kicks (PK), Yellow cards obtained (CrdY), Red cards obtained (CrdR), expected goals (xG), expected assists (xA). Između značajki koje smo odabrali definitivno postoji neka korelacija, no vjerojatno ne postoji prevelika korelacija. Svejedno, provjerimo tu činjenicu.
 
 ```{r}
 forward_players = players[players$MP > 0 & (players$Pos == "FW" | players$Pos == "FW,MF"),]
@@ -215,6 +215,12 @@ forward_players = players[players$MP > 0 & (players$Pos == "FW" | players$Pos ==
 # Create new column 'Gls+Ast'
 forward_players$GlsAst <- forward_players$Gls + forward_players$Ast
 
+cor(cbind(forward_players$MP, forward_players$Min, forward_players$PK, forward_players$CrdY, forward_players$CrdR, forward_players$xG, forward_players$xA))
+```
+
+Iz rezultata vidimo da postoji signifikantna korelacija između kolumni MP i Min (očekivano, broj odigranih minuta mora ovisit o broju odigranih utakmica) no te dvije kolumne su daleko od savršeno koreliranih pa možemo koristiti obje u linearnoj regresiji.
+
+```{r}
 # Split data into train and test sets
 set.seed(110)  # for reproducibility
 train_index <- sample(1:nrow(forward_players), 0.9*nrow(forward_players))
@@ -231,6 +237,8 @@ summary(model)
 ```{r}
 tidy(model)
 ```
+
+Iz rezultata linearne regresije vidimo da je odabir značajki dobar jer smo dobili R-squared rezultat od 0.9297 (ili adjusted 0.9255, adjusted R-squared uzima u obzir i broj varijabli koje smo koristili). Vidimo i da smo dobili sveukupnu p-vrijednost gotovo jednaku 0. To znači da sigurno možemo odbaciti nultu hipotezu koja kaže da nema linearne zavisnosti iznmeđu varijable nad kojom regresiramo i varijable koje smo uzeli da objašnjavaju regresiju, te možemo zaključiti da postoji linearan odnos.
 
 Provjerimo prvo kakva je distribucija reziduala.
 
@@ -311,4 +319,4 @@ result <- wilcox.test(GlsAst ~ Nationality, data = forward_players, alternative 
 result
 ```
 
-Dobivena $p$-vrijednost iznosi $0.03575$. To znači da možemo zaključiti da strani igrači doprinose više no nacionalni igrači s razinom značajnosti od $5\%$.
+Dobivena $p$-vrijednost iznosi $0.03575$. To znači da možemo statistički zaključiti da strani igrači doprinose više no nacionalni igrači s razinom značajnosti od $5\%$. 
