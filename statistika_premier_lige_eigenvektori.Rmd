@@ -137,7 +137,7 @@ Dobivena p-vrijednost je $0.6737$, mnogo veća od $0.05$. Ne možemo odbaciti nu
 
 Da bi odgovorili na ovo pitanje, koristit ćemo tri kolumne u zadanom datasetu: broj dobivenih žutih karton (CrdY), poziciju igrača (Pos), te broj odigranih utakmica (MP).
 
-Kao i prije, imamo problem s jednom od kolumni: neke vrijednosti CrdY fale. Za igrače koji nisu odigrali niti jednu minutu utakmica logično da vrijednost broja dobivenih žutih kartona fali. Taj broj dobivenih žutih kartona je tehnički 0, no smatramo da ovdje treba razlikovati igrače koji su odigrali neke utakmice i nisu dobili niti jedan žuti karton (valjana pretpostavka je da igraju "čisto", ne krše protivnike), za razliku od igrača koji uopče nisu igrali - ne možemo zaključiti da igraju "čisto" ili "prljavo". Igrače koji nisu uopće igrali ćemo izbaciti.
+Kao i prije, imamo problem s jednom od kolumni: neke vrijednosti CrdY fale. Za igrače koji nisu odigrali niti jednu minutu utakmica logično da vrijednost broja dobivenih žutih kartona fali. Taj broj dobivenih žutih kartona je tehnički 0, no smatramo da ovdje treba razlikovati igrače koji su odigrali neke utakmice i nisu dobili niti jedan žuti karton (valjana pretpostavka je da igraju "čisto", ne krše protivnike), za razliku od igrača koji uopće nisu igrali - ne možemo zaključiti da igraju "čisto" ili "prljavo". Igrače koji nisu uopće igrali ćemo izbaciti.
 
 ```{r}
 players_who_played <- players[players$MP > 0, c("Player", "Team", "Pos", "MP", "CrdY")]
@@ -248,13 +248,13 @@ residuals <- residuals(model)
 ggplot(data = data.frame(residuals), aes(x = residuals)) + geom_histogram(binwidth=0.5) + ggtitle("Distribution of Residuals")
 ```
 
-Rezultati linearni regresije su očekivani: očekivani golovi i očekivane asistencije najviše doprinose našoj definiciji uspješnosti te možemo zaključiti da je broj golova liarno ovisan o te dvije varijable na razini značajnosti boljoj od $1\%$. Pogledajmo tu linearnu ovisnost na grafu.
+Rezultati linearne regresije su očekivani: očekivani golovi i očekivane asistencije najviše doprinose našoj definiciji uspješnosti te možemo zaključiti da je broj golova linearno ovisan o te dvije varijable na razini značajnosti boljoj od $1\%$. Pogledajmo tu linearnu ovisnost na grafu.
 
 ```{r}
 ggplot(train_data, aes(x = xG + xA, y = GlsAst)) + geom_point() + geom_smooth(aes(y=GlsAst), method = "lm")
 ```
 
-Jedan zanimljiv rezltat linearne regresije je taj što broj dobivenih crvenih kartona ima relativno velik utjecaj na konačan broj zabijenih golova i asistencija. Doduše, $p$-vrijednost CrdR kolumne je ipak 0.26 što je daleko od statistički značajnog. Svejedno, pogledajmo kako broj crvenih kartona utječe na broj zabijenih golova i asistencija.
+Jedan zanimljiv rezultat linearne regresije je taj što broj dobivenih crvenih kartona ima relativno velik utjecaj na konačan broj zabijenih golova i asistencija. Doduše, $p$-vrijednost CrdR kolumne je ipak 0.26 što je daleko od statistički značajnog. Svejedno, pogledajmo kako broj crvenih kartona utječe na broj zabijenih golova i asistencija.
 
 ```{r}
 ggplot(train_data, aes(x = CrdR, y = GlsAst)) + geom_point() + geom_smooth(aes(y=GlsAst), method = "lm", se=F)
