@@ -1,7 +1,7 @@
 ---
-title: "Eigenvektori"
-author: "MVedak"
-date: "2022-12-06"
+title: "Eigenvektori - Statistika nogometaša engleske Premier lige"
+author: "Željana Puljić, Ines Kovač, Matija Radović, Matej Vedak"
+date: "2023-15-01"
 output:
   pdf_document: default
   html_document: default
@@ -9,11 +9,12 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(tidy.opts = list(width.cutoff = 60), tidy = TRUE)
 ```
 
 Učitavanje potrebnih paketa:
 
-```{r, echo=FALSE}
+```{r, message=FALSE}
 library(tidyverse)
 library("ggpubr")
 library(knitr)
