@@ -268,7 +268,16 @@ MSE <- mean((predictions - test_data$GlsAst)^2)
 print(MSE)
 ```
 
-Prosječno kvadratno odstupanje je 3.52899.
+Prosječno kvadratno odstupanje je 3.52899. Pogledajmo na grafu stvarne vrijednosti i naše predikcije.
+
+```{r}
+plot(predictions, test_data$GlsAst) + abline(0, 1)
+```
+
+```{r}
+residuals_test <- test_data$GlsAst - predictions
+plot(residuals_test ~ test_data$GlsAst)
+```
 
 ## 4. zadatak: Doprinose li sveukupnom uspjehu svoga tima više ”domaći” igrači (tj. igrači engleske nacionalnosti) ili strani igrači?
 
