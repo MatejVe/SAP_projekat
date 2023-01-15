@@ -253,7 +253,7 @@ ggplot(train_data, aes(x = CrdR, y = GlsAst)) + geom_point() + geom_smooth(aes(y
 
 Odokativno, čini se da broj crvenih kartona ipak nije linearno koreliran s brojem zabijenih golova i asistencija.
 
-To možemo i potvrditi eliminacijom varijabli koje ne objašnjavaju varijablu nad kojom regresiramo.
+To možemo i potvrditi eliminacijom varijabli koje ne objašnjavaju varijablu nad kojom regresiramo. Pri postupku ove eliminacije koristi se Akaike information criterion, mjera koja mjeri kvalitetu statističkog modela. Smanjuje se broj varijabli u modelu dok se pokušava očuvati što veća vrijednost te mjere.
 
 ```{r}
 model2 <- step(model)
@@ -279,6 +279,8 @@ residuals_test <- test_data$GlsAst - predictions
 plot(residuals_test ~ test_data$GlsAst)
 ```
 
+Čini se da naš model linearne regresije malo "overpredicta" stvarne vrijednosti.
+
 ## 4. zadatak: Doprinose li sveukupnom uspjehu svoga tima više ”domaći” igrači (tj. igrači engleske nacionalnosti) ili strani igrači?
 
 Kao i u prošlome zadatku, analizu provodimo samo za napadače.
@@ -299,7 +301,7 @@ ggboxplot(forward_players, x = "Nationality", y = "GlsAst",
           ylab = "Goals scored + assists", xlab = "Player's nationality")
 ```
 
-Distribucije uzoraka očito nisu normalno distribuirane. To znači da ne možemo koristit standardan t-test, već moramo primjeniti neparametarsku metodu - Wilcoxon rank-sum test. Nulta hipoteza je da su dvije distribucije jednake, tj da nema signifikantne razlike između uspjeha nacionalnih i stranih igrača. Alternativna hipoteza je da postoji neka signifikantna razlika i to specifično da strani igrači doprinose više nego nacionalni (jednostrani test).
+Distribucije uzoraka očito nisu normalno distribuirane. To znači da ne možemo koristiti standardan t-test, već moramo primjeniti neparametarsku metodu - Wilcoxon rank-sum test. Nulta hipoteza je da su dvije distribucije jednake, tj da nema signifikantne razlike između uspjeha nacionalnih i stranih igrača. Alternativna hipoteza je da postoji neka signifikantna razlika i to specifično da strani igrači doprinose više nego nacionalni (jednostrani test).
 Uzmimo razinu značajnosti $\alpha = 0.05$.
 
 ```{r}
